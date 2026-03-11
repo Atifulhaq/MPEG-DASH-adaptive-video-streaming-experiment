@@ -29,22 +29,71 @@ Two virtual machines were configured using Oracle VirtualBox.
 
 Server VM
  
-•	Operating system: Debian (64 bit)
-•	CPU: 2
-•	Memory: 2048MB
-•	Storage: 20 GB virtual disk
-•	Network: NAT with internet access
+1. Operating system: Debian (64 bit)
+2. CPU: 2
+3. Memory: 2048MB
+4. Storage: 20 GB virtual disk
+5. Network: NAT with internet access
 
 Client VM
 
-•	Operating system: Ubuntu (64 bit)
-•	CPU: 2
-•	Memory: 2048MB
-•	Storage: 20 GB virtual disk
-•	Network: NAT with internet access
+1. Operating system: Ubuntu (64 bit)
+2. CPU: 2
+3. Memory: 2048MB
+4.	Storage: 20 GB virtual disk
+5.	Network: NAT with internet access
 
 VM System Details
+
 <img width="513" height="290" alt="image" src="https://github.com/user-attachments/assets/b4e10474-7f58-4e78-b825-de67706adc9c" />
+
+
+# FFmpeg Installation
+
+FFmpeg was installed on the server virtual machine to perform video transcoding and DASH packaging.
+
+Installation commands:
+
+sudo apt update
+sudo apt install ffmpeg
+
+To verify:
+
+ffmpeg -version
+
+<img width="499" height="389" alt="image" src="https://github.com/user-attachments/assets/fbdd9c95-af02-4c38-b548-d9fd9319a941" />
+
+
+# Video transcoding
+
+The original video file was transcoded into three different bitrate representations in order to enable adaptive streaming.
+
+Transcoding commands:
+
+ffmpeg -i videoOne.mp4 -b:v 1500k videoOne_1500.mp4
+
+ffmpeg -i videoOne.mp4 -b:v 2000k videoOne_2000.mp4
+
+ffmpeg -i videoOne.mp4 -b:v 4000k videoOne_4000.mp4
+
+These bitrate levels allow the DASH player to dynamically adapt video quality depending on the available bandwitdh.
+
+<img width="483" height="380" alt="image" src="https://github.com/user-attachments/assets/f2bf76f2-b608-4be0-8774-29ee6705a34f" />
+
+
+
+# MPEG-DASH stream generation 
+
+After transcoding, the video files were packaged into the MPEG-DASH streaming format.
+
+DASH packaging command:
+
+ffmpeg -I videoOne.mp4 -map 0 \ -f dash \ videoOne_manifest.mpd
+
+This process generates: DASH video segments and media presentation manifest file (MPD).
+
+<img width="498" height="390" alt="image" src="https://github.com/user-attachments/assets/c6a18758-dc49-4b23-bfb8-801524a1eb3e" />
+
 
 
 
