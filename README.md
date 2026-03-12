@@ -88,11 +88,39 @@ After transcoding, the video files were packaged into the MPEG-DASH streaming fo
 
 DASH packaging command:
 
-ffmpeg -I videoOne.mp4 -map 0 \ -f dash \ videoOne_manifest.mpd
+ffmpeg -i videoOne.mp4 -map 0 -f dash videoOne_manifest.mpd
+
 
 This process generates: DASH video segments and media presentation manifest file (MPD).
 
 <img width="498" height="390" alt="image" src="https://github.com/user-attachments/assets/c6a18758-dc49-4b23-bfb8-801524a1eb3e" />
+
+
+# Apache web server deployment
+
+An Apache web server was installed on the server virtual machine to host the DASH video content.
+
+Installation command:
+
+sudo apt install apache2
+
+The DASH files were placed in:
+
+/var/www/html/
+
+The video sream was then accessible via a web browser using the public server URL link.
+
+
+
+
+# Video playback
+
+The client virtual machine accessed the streaming server through a web browser by using a DASH compatible video player.
+
+The player retrieves the MPD manifest file and dynamically downloads video segments based on current network conditions.
+
+
+<img width="515" height="261" alt="image" src="https://github.com/user-attachments/assets/408a66cf-1cae-4aae-8867-feeec3a06a61" />
 
 
 
