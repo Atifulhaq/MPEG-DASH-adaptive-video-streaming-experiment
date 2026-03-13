@@ -123,5 +123,23 @@ The player retrieves the MPD manifest file and dynamically downloads video segme
 <img width="515" height="261" alt="image" src="https://github.com/user-attachments/assets/408a66cf-1cae-4aae-8867-feeec3a06a61" />
 
 
+# Network traffic generation 
+
+Network traffic was generated using iperf to simulate background network congestion.
+
+iperf server command:
+
+iperf -s
+
+iperf client command:
+
+iperf -c 10.0.2.15 -b 1M -t 60
+
+This created background network traffic while the video stream was active.
+
+<img width="514" height="403" alt="image" src="https://github.com/user-attachments/assets/64d8a7d4-7a83-4344-bc65-20ec91241057" />
+
+
+
 
 
