@@ -140,6 +140,33 @@ This created background network traffic while the video stream was active.
 <img width="514" height="403" alt="image" src="https://github.com/user-attachments/assets/64d8a7d4-7a83-4344-bc65-20ec91241057" />
 
 
+# Traffic control experiments
+
+Linux traffic control (tc) was used to emulate different network conditions.
+
+Three different configurations were tested.
 
 
+Token bucket filter (TBF)
 
+The TBF mechanism was used to limit bandwidth to 2.5Mbps.
+
+Configuration command:
+
+tc qdisc add dev enp0s3 root tbf rate 2.5mbit burst 32kbit latency 50ms
+
+
+Hierarchical token bucket (HTB)
+
+HTB was used to prioritize video streaming traffic over background traffic.
+
+Configuration command:
+
+sudo tc qdisc add dev enp0s3 root handle 1: htb default 20
+
+
+Traffic policing 
+
+Traffic policing was applied to enforce strict bandwidth limits by dropping packets that exceed the defined rate.
+
+This configuration resulted in frequent playback interruptions due to packet loss.
