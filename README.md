@@ -4,14 +4,14 @@
 
 This repository contains the implementation and experimental evaluation of a MPEG-DASH adaptive video streaming system developed in a virtualized Linux environment. The aim of the project is to investigate how different network control mechanisms affect video streaming performance and quality of experience (QoE).
 
-The experiment evaluates the impact of network bandwitdh limitations, traffic prioritization and packet loss on adaptive streaming performance. Linux traffic control mechanisms such as token bucket filter (TBF), hierarchical token bucket (HTB) and traffic policing were implemented to simulate different network conditions.
+The experiment evaluates the impact of network bandwidth limitations, traffic prioritization and packet loss on adaptive streaming performance. Linux traffic control mechanisms such as token bucket filter (TBF), hierarchical token bucket (HTB) and traffic policing were implemented to simulate different network conditions.
 
 The system was deployed by using two virtual machines, one machine acting as the streaming server and the other acting as the streaming client.
 
 
 # System architecture
 
-The sreaming pipeline follows the standard MPEG-DASH architecture:
+The streaming pipeline follows the standard MPEG-DASH architecture:
 
 1. Obtaining video content
 2. Transcoding video into multiple different bitrates
@@ -19,7 +19,7 @@ The sreaming pipeline follows the standard MPEG-DASH architecture:
 4. Hosting segments on an Apache web server
 5. Client side playback through a web browser
 
-The adaptive client dynamically selects the suitable video bitrate representation depending on available bandwitdh conditions.
+The adaptive client dynamically selects the suitable video bitrate representation depending on available bandwidth conditions.
 
 
 # Virtual machine environment
@@ -76,7 +76,7 @@ ffmpeg -i videoOne.mp4 -b:v 2000k videoOne_2000.mp4
 
 ffmpeg -i videoOne.mp4 -b:v 4000k videoOne_4000.mp4
 
-These bitrate levels allow the DASH player to dynamically adapt video quality depending on the available bandwitdh.
+These bitrate levels allow the DASH player to dynamically adapt video quality depending on the available bandwidth.
 
 <img width="483" height="380" alt="image" src="https://github.com/user-attachments/assets/f2bf76f2-b608-4be0-8774-29ee6705a34f" />
 
@@ -88,7 +88,10 @@ After transcoding, the video files were packaged into the MPEG-DASH streaming fo
 
 DASH packaging command:
 
-ffmpeg -i videoOne.mp4 -map 0 -f dash videoOne_manifest.mpd
+ffmpeg -i videoOne_1500.mp4 -i videoOne_2000.mp4 -i videoOne_4000.mp4 \
+-map 0:v -map 1:v -map 2:v -f dash videoOne_manifest.mpd
+
+
 
 
 This process generates: DASH video segments and media presentation manifest file (MPD).
@@ -108,7 +111,7 @@ The DASH files were placed in:
 
 /var/www/html/
 
-The video sream was then accessible via a web browser using the public server URL link.
+The video stream was then accessible via a web browser using the public server URL link.
 
 
 
@@ -174,21 +177,26 @@ Traffic policing was applied to enforce strict bandwidth limits by dropping pack
 
 The performance of the streaming was evaluated using the mean opinion score (MOS) methodology.
 
-MOS sclae:  5 - Excellent, 4 - Good, 3 - Fair, 2 - Poor, 1 – Bad
+MOS scale:  5 - Excellent, 4 - Good, 3 - Fair, 2 - Poor, 1 – Bad
 
 
 # Experimental results
 
-|  Scenario    | Network mechanism |        Observation                       | MOS score     |
-| ------------- | ------------- |  | -----------------------------------------| ------------- |
-| Baseline      | Unconstrained |  | Immediate playback at 4Mbps              |     4.9       |
-| Scenario 1    | TBF (shaping) |  | Quick switch to 1.5Mbps                  |     3.4       |
-| Scenario 2    | HTB (priority)|  | Video maintained 4Mbps despite iperf load|     4.6       |
-| Scenario 3    | Policing(drop)|  | Multiple 4 second stalls                 |     1.8       |
+
+| Scenario | Network mechanism | Observation | MOS score |
+| :--- | :--- | :--- | :--- |
+| Baseline | Unconstrained | Immediate playback at 4Mbps | 4.9 |
+| Scenario 1 | TBF (shaping) | Quick switch to 1.5Mbps | 3.4 |
+| Scenario 2 | HTB (priority) | Video maintained 4Mbps despite iperf load | 4.6 |
+| Scenario 3 | Policing (drop) | Multiple 4 second stalls | 1.8 |
 
 
-The results show that prioritzation of streaming traffic improves playback stability and overall quality of experience.
+
+The results show that prioritization of streaming traffic improves playback stability and overall quality of experience.
 
 
+# Conclusion
+
+The experiment shows that adaptive streaming technologies such as MPEG-DASH perform best when combined with effective network traffic management mechanisms. While adaptive bitrate algorithms can respond to bandwidth fluctuations, network level prioritization strategies such as HTB improve streaming stability and user quality of experience.
 
 This configuration resulted in frequent playback interruptions due to packet loss.
