@@ -169,4 +169,26 @@ Traffic policing
 
 Traffic policing was applied to enforce strict bandwidth limits by dropping packets that exceed the defined rate.
 
+
+# Performance evaluation
+
+The performance of the streaming was evaluated using the mean opinion score (MOS) methodology.
+
+MOS sclae:  5 - Excellent, 4 - Good, 3 - Fair, 2 - Poor, 1 – Bad
+
+
+# Experimental results
+
+|  Scenario    | Network mechanism |        Observation                       | MOS score     |
+| ------------- | ------------- |  | -----------------------------------------| ------------- |
+| Baseline      | Unconstrained |  | Immediate playback at 4Mbps              |     4.9       |
+| Scenario 1    | TBF (shaping) |  | Quick switch to 1.5Mbps                  |     3.4       |
+| Scenario 2    | HTB (priority)|  | Video maintained 4Mbps despite iperf load|     4.6       |
+| Scenario 3    | Policing(drop)|  | Multiple 4 second stalls                 |     1.8       |
+
+
+The results show that prioritzation of streaming traffic improves playback stability and overall quality of experience.
+
+
+
 This configuration resulted in frequent playback interruptions due to packet loss.
